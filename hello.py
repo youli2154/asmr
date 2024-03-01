@@ -25,6 +25,9 @@ audio_b.set_volume(volume_b)
 audio_c.set_volume(volume_c)
 audio_d.set_volume(volume_d)
 
+# Flags to track which key was pressed last
+last_key_pressed = None
+
 # Main loop
 running = True
 while running:
@@ -33,32 +36,24 @@ while running:
             running = False
 
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:
-                audio_a.play(-1)
-            elif event.key == pygame.K_b:
-                audio_b.play(-1)
-            elif event.key == pygame.K_c:
-                audio_c.play(-1)
-            elif event.key == pygame.K_d:
-                audio_d.play(-1)
-                
-            elif event.key == pygame.K_z:
-                audio_a.set_volume(0)
-                audio_b.set_volume(0)
-                audio_c.set_volume(0)
+            last_key_pressed = event.key
 
     # Update volume of each audio based on potentiometer value
-    volume_a = pot.value
-    audio_a.set_volume(volume_a)
-    
-    volume_b = pot.value
-    audio_b.set_volume(volume_b)
-    
-    volume_c = pot.value
-    audio_c.set_volume(volume_c)
-    
-    volume_d = pot.value
-    audio_d.set_volume(volume_d)
+    if last_key_pressed == pygame.K_a:
+        volume_a = pot.value
+        audio_a.set_volume(volume_a)
+    elif last_key_pressed == pygame.K_b:
+        volume_b = pot.value
+        audio_b.set_volume(volume_b)
+    elif last_key_pressed == pygame.K_c:
+        volume_c = pot.value
+        audio_c.set_volume(volume_c)
+    elif last_key_pressed == pygame.K_d:
+        volume_d = pot.value
+        audio_d.set_volume(volume_d)
+    else:
+        # Stop updating volume if no key is pressed
+        last_key_pressed = None
 
 # Quit Pygame
 pygame.quit()

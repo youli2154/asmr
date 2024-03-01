@@ -25,8 +25,11 @@ audio_b.set_volume(volume_b)
 audio_c.set_volume(volume_c)
 audio_d.set_volume(volume_d)
 
-# Flag to track which key was pressed last
-last_key_pressed = None
+# Flags to track which key was pressed last
+key_a_pressed = False
+key_b_pressed = False
+key_c_pressed = False
+key_d_pressed = False
 
 # Main loop
 running = True
@@ -36,26 +39,25 @@ while running:
             running = False
 
         elif event.type == pygame.KEYDOWN:
-            # Update last_key_pressed only if it's not already set
-            if last_key_pressed is None:
-                last_key_pressed = event.key
+            # Update key pressed flags
+            key_a_pressed = event.key == pygame.K_a
+            key_b_pressed = event.key == pygame.K_b
+            key_c_pressed = event.key == pygame.K_c
+            key_d_pressed = event.key == pygame.K_d
 
     # Update volume of each audio based on potentiometer value only if its corresponding key is pressed
-    if last_key_pressed == pygame.K_a:
+    if key_a_pressed:
         volume_a = pot.value
         audio_a.set_volume(volume_a)
-    elif last_key_pressed == pygame.K_b:
+    elif key_b_pressed:
         volume_b = pot.value
         audio_b.set_volume(volume_b)
-    elif last_key_pressed == pygame.K_c:
+    elif key_c_pressed:
         volume_c = pot.value
         audio_c.set_volume(volume_c)
-    elif last_key_pressed == pygame.K_d:
+    elif key_d_pressed:
         volume_d = pot.value
         audio_d.set_volume(volume_d)
-    elif last_key_pressed is not None:
-        # If any other key is pressed, reset last_key_pressed to stop updating volume
-        last_key_pressed = None
 
 # Quit Pygame
 pygame.quit()

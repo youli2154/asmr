@@ -34,16 +34,12 @@ while running:
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
-                volume_a = pot.value
                 audio_a.play(-1)
             elif event.key == pygame.K_b:
-                volume_b = pot.value
                 audio_b.play(-1)
             elif event.key == pygame.K_c:
-                volume_c = pot.value
                 audio_c.play(-1)
             elif event.key == pygame.K_d:
-                volume_d = pot.value
                 audio_d.play(-1)
                 
             elif event.key == pygame.K_z:
@@ -51,10 +47,17 @@ while running:
                 audio_b.set_volume(0)
                 audio_c.set_volume(0)
 
-    # Set volume for each audio based on potentiometer value
+    # Update volume of each audio based on potentiometer value
+    volume_a = pot.value
     audio_a.set_volume(volume_a)
+    
+    volume_b = pot.value
     audio_b.set_volume(volume_b)
+    
+    volume_c = pot.value
     audio_c.set_volume(volume_c)
+    
+    volume_d = pot.value
     audio_d.set_volume(volume_d)
 
 # Quit Pygame

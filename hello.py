@@ -1,4 +1,8 @@
 import pygame
+from gpiozero import MCP3008
+
+pot = MCP3008(0)
+
 # Initialize Pygame
 pygame.init()
 
@@ -24,6 +28,8 @@ audio_d.set_volume(volume_d)
 # Main loop
 running = True
 while running:
+    #print(pot.value)
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -31,6 +37,7 @@ while running:
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_a:
                 audio_a.play(-1)
+                audio_a.set_volume(volume_a)
             elif event.key == pygame.K_b:
                 audio_b.play(-1)
             elif event.key == pygame.K_c:
@@ -39,8 +46,9 @@ while running:
                 audio_d.play(-1)
                 
             elif event.key == pygame.K_i:
-                volume_a = min(1.0, volume_a + 0.05)
+                volume_a = pot.value
                 audio_a.set_volume(volume_a)
+                print(volume_a)
             elif event.key == pygame.K_j:
                 volume_a = max(0.0, volume_a - 0.05)
                 audio_a.set_volume(volume_a)
@@ -58,6 +66,13 @@ while running:
             elif event.key == pygame.K_y:
                 volume_c = max(0.0, volume_c - 0.05)
                 audio_c.set_volume(volume_c)
+
+            elif event.key == pygame.K_u:
+                volume_d = min(1.0, volume_d + 0.05)
+                audio_d.set_volume(volume_d)
+            elif event.key == pygame.K_v:
+                volume_d = max(0.0, volume_d - 0.05)
+                audio_d.set_volume(volume_d)
 
             elif event.key == pygame.K_z:
                 audio_a.set_volume(0)

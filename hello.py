@@ -12,7 +12,12 @@ audio_files = {
     pygame.K_a: pygame.mixer.Sound("light-rain.mp3"),
     pygame.K_b: pygame.mixer.Sound("campfire.mp3"),
     pygame.K_c: pygame.mixer.Sound("thunder-2.mp3"),
-    pygame.K_d: pygame.mixer.Sound("Instrument of Surrender.mp3")
+    pygame.K_d: pygame.mixer.Sound("Instrument of Surrender.mp3"),
+    pygame.K_e: pygame.mixer.Sound("wave.mp3"),
+    pygame.K_f: pygame.mixer.Sound("wind.mp3"),
+    pygame.K_g: pygame.mixer.Sound("birds.mp3"),
+    pygame.K_h: pygame.mixer.Sound("cricket.mp3"),
+    pygame.K_i: pygame.mixer.Sound("train.mp3")
 }
 
 # Set initial volumes

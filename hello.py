@@ -18,7 +18,7 @@ audio_files = {
     pygame.K_g: pygame.mixer.Sound("birds.mp3"),
     pygame.K_h: pygame.mixer.Sound("cricket.mp3"),
     pygame.K_i: pygame.mixer.Sound("train.mp3"),
-    pygame.K_d: pygame.mixer.Sound("Instrument of Surrender.mp3")
+    pygame.K_j: pygame.mixer.Sound("Instrument of Surrender.mp3")
 
 }
 

@@ -6,6 +6,9 @@ pot = MCP3008(channel=0)
 # Initialize Pygame and mixer
 pygame.init()
 pygame.mixer.init()
+pygame.mixer.set_num_channels(16)
+
+screen = pygame.display.set_mode((400,300))
 
 # Load audio files
 audio_files = {
@@ -20,10 +23,8 @@ audio_files = {
     pygame.K_i: pygame.mixer.Sound("bowl.mp3"),
     pygame.K_j: pygame.mixer.Sound("cafe.mp3"),
     pygame.K_k: pygame.mixer.Sound("train.mp3"),
-    pygame.K_l: pygame.mixer.Sound("Instrument of Surrender.mp3"),
-    # Added pitch-adjusted versions of light-rain
-    "higher": pygame.mixer.Sound("light-rain_higher.mp3"),
-    "lower": pygame.mixer.Sound("light-rain_lower.mp3"),
+    pygame.K_l: pygame.mixer.Sound("Instrument of Surrender.mp3")
+
 }
 
 # Set initial volumes
@@ -45,17 +46,9 @@ while running:
                 if current_audio is not audio_files[event.key]:  # If a new audio is selected
                     current_audio = audio_files[event.key]
                     current_audio.play(-1)  # Play the selected audio in a loop
-            # Handling for pitch adjustments
-            if event.key == pygame.K_m:  # Increase pitch of light-rain
-                if current_audio == audio_files[pygame.K_a]:  # Check if light-rain is currently playing
-                    current_audio.stop()  # Stop current playback
-                    current_audio = audio_files["higher"]
-                    current_audio.play(-1)  # Play the higher-pitched version in a loop
-            elif event.key == pygame.K_n:  # Decrease pitch of light-rain
-                if current_audio == audio_files[pygame.K_a]:  # Check if light-rain is currently playing
-                    current_audio.stop()  # Stop current playback
-                    current_audio = audio_files["lower"]
-                    current_audio.play(-1)  # Play the lower-pitched version in a loop
+            elif event.key == pygame.K_z:
+                for sound in audio_files.values():
+                    sound.set_volume(0)
 
     # Continuously update the volume of the currently selected audio
     if current_audio:

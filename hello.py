@@ -6,9 +6,6 @@ pot = MCP3008(channel=0)
 # Initialize Pygame and mixer
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.set_num_channels(16)
-
-screen = pygame.display.set_mode((400,300))
 
 # Load audio files
 audio_files = {
@@ -46,9 +43,6 @@ while running:
                 if current_audio is not audio_files[event.key]:  # If a new audio is selected
                     current_audio = audio_files[event.key]
                     current_audio.play(-1)  # Play the selected audio in a loop
-            elif event.key == pygame.K_z:
-                for sound in audio_files.values():
-                    sound.set_volume(0)
 
     # Continuously update the volume of the currently selected audio
     if current_audio:

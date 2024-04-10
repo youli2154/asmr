@@ -8,7 +8,14 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.set_num_channels(16)
 
-screen = pygame.display.set_mode((400,300))
+# Set the size of the window
+screen_width = 600
+screen_height = 480
+screen = pygame.display.set_mode((screen_width, screen_height))
+
+# Define colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
 
 # Load audio files
 audio_files = {
@@ -24,16 +31,39 @@ audio_files = {
     pygame.K_j: pygame.mixer.Sound("cafe.mp3"),
     pygame.K_k: pygame.mixer.Sound("train.mp3"),
     pygame.K_l: pygame.mixer.Sound("Instrument of Surrender.mp3")
-
 }
+
+# Titles for display
+titles = [
+    "rain", "stream", "waves",
+    "fire", "thunder", "wind",
+    "birds", "cricket", "bell",
+    "cafe", "train", "world"
+]
 
 # Set initial volumes
 initial_volume = 0.5  # Example initial volume
 for sound in audio_files.values():
     sound.set_volume(initial_volume)
 
-# Variable to keep track of which audio is currently being volume-controlled
-current_audio = None
+# Initialize font
+font = pygame.font.Font(None, 24)
+
+# Function to draw the matrix
+def draw_matrix(screen, titles):
+    screen.fill(BLACK)
+    spacing_x = screen_width // 3
+    spacing_y = screen_height // 4
+
+    for i, title in enumerate(titles):
+        x = (i % 3) * spacing_x + 10  # Position titles in columns
+        y = (i // 3) * spacing_y + 10  # Position titles in rows
+
+        # Create the label for each sound
+        label = font.render(f"{title}: {int(pot.value * 100)}%", True, WHITE)
+
+        # Draw the label on the screen
+        screen.blit(label, (x, y))
 
 # Main loop
 running = True
@@ -51,5 +81,9 @@ while running:
     if current_audio:
         new_volume = pot.value  # Read potentiometer value
         current_audio.set_volume(new_volume)
+
+    # Redraw the GUI with updated volume
+    draw_matrix(screen, titles)
+    pygame.display.flip()
 
 pygame.quit()

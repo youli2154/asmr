@@ -6,6 +6,9 @@ pot = MCP3008(channel=0)
 # Initialize Pygame and mixer
 pygame.init()
 pygame.mixer.init()
+pygame.mixer.set_num_channels(16)
+
+screen = pygame.display.set_mode((400,300))
 
 # Load audio files
 audio_files = {

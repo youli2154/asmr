@@ -65,6 +65,9 @@ def draw_matrix(screen, titles):
         # Draw the label on the screen
         screen.blit(label, (x, y))
 
+# Variable to keep track of which audio is currently being volume-controlled
+current_audio = None
+
 # Main loop
 running = True
 while running:

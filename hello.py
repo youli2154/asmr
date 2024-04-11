@@ -15,6 +15,17 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+# Titles for display
+titles = [
+    "rain", "stream", "waves",
+    "fire", "thunder", "wind",
+    "birds", "cricket", "bell",
+    "cafe", "train", "world"
+]
+
+# Map titles to keys for volume display
+title_keys = list(audio_files.keys())
+
 # Initialize font
 font = pygame.font.Font(None, 24)
 

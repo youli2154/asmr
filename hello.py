@@ -41,16 +41,17 @@ titles = [
     "cafe", "train", "world"
 ]
 
-# Set initial volumes
-initial_volume = 0.5  # Example initial volume
-for sound in audio_files.values():
-    sound.set_volume(initial_volume)
+# Map titles to keys for volume display
+title_keys = list(audio_files.keys())
 
 # Initialize font
 font = pygame.font.Font(None, 24)
 
+# Initialize volumes for display
+volumes_for_display = {key: 0 for key in audio_files}  # All volumes start at 0%
+
 # Function to draw the matrix
-def draw_matrix(screen, titles):
+def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
     spacing_x = screen_width // 3
     spacing_y = screen_height // 4
@@ -59,14 +60,20 @@ def draw_matrix(screen, titles):
         x = (i % 3) * spacing_x + 10  # Position titles in columns
         y = (i // 3) * spacing_y + 10  # Position titles in rows
 
+        # Get the corresponding key for the title
+        key = title_keys[i]
+        
+        # Check if the title is the current one being adjusted
+        volume_display = volumes_for_display[key] if key == current_key else volumes_for_display[key]
+        
         # Create the label for each sound
-        label = font.render(f"{title}: {int(pot.value * 100)}%", True, WHITE)
+        label = font.render(f"{title}: {volume_display}%", True, WHITE)
 
         # Draw the label on the screen
         screen.blit(label, (x, y))
 
-# Variable to keep track of which audio is currently being volume-controlled
-current_audio = None
+# Variable to keep track of which audio key is currently being volume-controlled
+current_audio_key = None
 
 # Main loop
 running = True
@@ -76,17 +83,19 @@ while running:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key in audio_files:
+                current_audio_key = event.key  # Update the current key
                 if current_audio is not audio_files[event.key]:  # If a new audio is selected
                     current_audio = audio_files[event.key]
                     current_audio.play(-1)  # Play the selected audio in a loop
 
     # Continuously update the volume of the currently selected audio
-    if current_audio:
-        new_volume = pot.value  # Read potentiometer value
-        current_audio.set_volume(new_volume)
+    if current_audio and current_audio_key is not None:
+        new_volume = int(pot.value * 100)  # Convert potentiometer value to percentage
+        volumes_for_display[current_audio_key] = new_volume  # Update only the current audio's volume for display
+        current_audio.set_volume(pot.value)  # Set the actual volume
 
     # Redraw the GUI with updated volume
-    draw_matrix(screen, titles)
+    draw_matrix(screen, titles, current_audio_key)
     pygame.display.flip()
 
 pygame.quit()

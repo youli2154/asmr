@@ -1,6 +1,8 @@
 import pygame
 from gpiozero import MCP3008
 
+pot = MCP3008(channel=0)
+
 # Initialize Pygame and mixer
 pygame.init()
 pygame.mixer.init()
@@ -15,8 +17,21 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# Initialize font
-font = pygame.font.Font(None, 24)
+# Load audio files
+audio_files = {
+    pygame.K_a: pygame.mixer.Sound("light-rain.mp3"),
+    pygame.K_b: pygame.mixer.Sound("stream.mp3"),
+    pygame.K_c: pygame.mixer.Sound("waves.mp3"),
+    pygame.K_d: pygame.mixer.Sound("fire.mp3"),
+    pygame.K_e: pygame.mixer.Sound("thunder-2.mp3"),
+    pygame.K_f: pygame.mixer.Sound("wind.mp3"),
+    pygame.K_g: pygame.mixer.Sound("birds.mp3"),
+    pygame.K_h: pygame.mixer.Sound("cricket.mp3"),
+    pygame.K_i: pygame.mixer.Sound("bowl.mp3"),
+    pygame.K_j: pygame.mixer.Sound("cafe.mp3"),
+    pygame.K_k: pygame.mixer.Sound("train.mp3"),
+    pygame.K_l: pygame.mixer.Sound("Instrument of Surrender.mp3")
+}
 
 # Titles for display
 titles = [
@@ -26,60 +41,14 @@ titles = [
     "cafe", "train", "world"
 ]
 
-# Define sound sets for O, P, Q
-sound_sets = {
-    'O': {
-        pygame.K_a: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_b: pygame.mixer.Sound("stream.mp3"),
-        pygame.K_c: pygame.mixer.Sound("waves.mp3"),
-        pygame.K_d: pygame.mixer.Sound("fire.mp3"),
-        pygame.K_e: pygame.mixer.Sound("thunder-2.mp3"),
-        pygame.K_f: pygame.mixer.Sound("wind.mp3"),
-        pygame.K_g: pygame.mixer.Sound("birds.mp3"),
-        pygame.K_h: pygame.mixer.Sound("cricket.mp3"),
-        pygame.K_i: pygame.mixer.Sound("bowl.mp3"),
-        pygame.K_j: pygame.mixer.Sound("cafe.mp3"),
-        pygame.K_k: pygame.mixer.Sound("train.mp3"),
-        pygame.K_l: pygame.mixer.Sound("Instrument of Surrender.mp3")
-    },
-    'P': {
-        pygame.K_a: pygame.mixer.Sound("light-rain.mp3"),  # Placeholder sounds
-        pygame.K_b: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_c: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_d: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_e: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_f: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_g: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_h: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_i: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_j: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_k: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_l: pygame.mixer.Sound("light-rain.mp3")
-    },
-    'Q': {
-        pygame.K_a: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_b: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_c: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_d: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_e: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_f: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_g: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_h: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_i: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_j: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_k: pygame.mixer.Sound("light-rain.mp3"),
-        pygame.K_l: pygame.mixer.Sound("light-rain.mp3")
-    }
-}
+# Map titles to keys for volume display
+title_keys = list(audio_files.keys())
 
-# Current sound set, starting with 'O'
-current_set = 'O'
-current_sounds = sound_sets[current_set]
-current_audio = None
-title_keys = list(current_sounds.keys())  # Use the keys from the current sound set
+# Initialize font
+font = pygame.font.Font(None, 24)
 
-# Volumes for display
-volumes_for_display = {key: 0 for key in title_keys}
+# Initialize volumes for display
+volumes_for_display = {key: 0 for key in audio_files}  # All volumes start at 0%
 
 # Function to draw the matrix
 def draw_matrix(screen, titles, current_key):
@@ -90,10 +59,21 @@ def draw_matrix(screen, titles, current_key):
     for i, title in enumerate(titles):
         x = (i % 3) * spacing_x + 10  # Position titles in columns
         y = (i // 3) * spacing_y + 10  # Position titles in rows
+
+        # Get the corresponding key for the title
         key = title_keys[i]
-        volume_display = volumes_for_display[key]
+        
+        # Check if the title is the current one being adjusted
+        volume_display = volumes_for_display[key] if key == current_key else volumes_for_display[key]
+        
+        # Create the label for each sound
         label = font.render(f"{title}: {volume_display}%", True, WHITE)
+
+        # Draw the label on the screen
         screen.blit(label, (x, y))
+
+# Variable to keep track of which audio key is currently being volume-controlled
+current_audio_key = None
 
 # Main loop
 running = True
@@ -102,26 +82,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key in (pygame.K_o, pygame.K_p, pygame.K_q):
-                if event.key == pygame.K_o:
-                    current_set = 'O'
-                elif event.key == pygame.K_p:
-                    current_set = 'P'
-                elif event.key == pygame.K_q:
-                    current_set = 'Q'
-                current_sounds = sound_sets[current_set]
-                title_keys = list(current_sounds.keys())  # Update keys for current set
-                volumes_for_display = {key: 0 for key in title_keys}  # Reset volumes for new set
+            if event.key in audio_files:
+                current_audio_key = event.key  # Update the current key
+                if current_audio is not audio_files[event.key]:  # If a new audio is selected
+                    current_audio = audio_files[event.key]
+                    current_audio.play(-1)  # Play the selected audio in a loop
 
-            # Check if the pressed key corresponds to a sound in the current set
-            if event.key in current_sounds:
-                if current_audio:
-                    current_audio.stop()
-                current_audio = current_sounds[event.key]
-                current_audio.play(-1)  # Play the selected audio in a loop
+    # Continuously update the volume of the currently selected audio
+    if current_audio and current_audio_key is not None:
+        new_volume = int(pot.value * 100)  # Convert potentiometer value to percentage
+        volumes_for_display[current_audio_key] = new_volume  # Update only the current audio's volume for display
+        current_audio.set_volume(pot.value)  # Set the actual volume
 
     # Redraw the GUI with updated volume
-    draw_matrix(screen, titles, current_set)
+    draw_matrix(screen, titles, current_audio_key)
     pygame.display.flip()
 
 pygame.quit()

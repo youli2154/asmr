@@ -24,7 +24,7 @@ titles = [
 ]
 
 # Map titles to keys for volume display
-title_keys = list(audio_files.keys())
+title_keys = list(sound_sets.keys())
 
 # Initialize font
 font = pygame.font.Font(None, 24)

@@ -6,7 +6,7 @@ pot = MCP3008(channel=0)
 # Initialize Pygame and mixer
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.set_num_channels(16)  # Ensure enough channels for simultaneous playback
+pygame.mixer.set_num_channels(16)  # Ensure there are enough channels
 
 # Set the size of the window
 screen_width = 600
@@ -52,64 +52,52 @@ sound_sets = {
     }
 }
 
-# Titles for display
-titles = [
-    "rain", "stream", "waves",
-    "fire", "thunder", "wind",
-    "birds", "cricket", "bell",
-    "cafe", "train", "world"
-]
-
 current_set = 'O'
 current_sounds = sound_sets[current_set]
-current_channels = {key: pygame.mixer.Channel(index) for index, key in enumerate(current_sounds.keys())}
 current_audio = None
 current_audio_key = None
-title_keys = list(current_sounds.keys())
 
 # Initialize volumes for display
-volumes_for_display = {key: 0 for key in title_keys}
+volumes_for_display = {key: 0 for key in current_sounds}
 
 # Function to draw the matrix
 def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
-    spacing_x = screen_width // 3
-    spacing_y = screen_height // 4
-    for i, title in enumerate(titles):
-        x = (i % 3) * spacing_x + 10
-        y = (i // 3) * spacing_y + 10
-        key = title_keys[i]
+    for i, key in enumerate(current_sounds.keys()):
+        x = (i % 3) * screen_width // 3 + 10
+        y = (i // 3) * screen_height // 4 + 10
         volume_display = volumes_for_display[key]
-        label = font.render(f"{title}: {volume_display}%", True, WHITE)
+        label = font.render(f"{titles[i]}: {volume_display}%", True, WHITE)
         screen.blit(label, (x, y))
 
 # Main loop
 running = True
 while running:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+        if event.type pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_o or event.key == pygame.K_p:
-                current_set = 'O' if event.key == pygame.K_o else 'P'
+            if event.key == pygame.K_o:
+                current_set = 'O'
                 current_sounds = sound_sets[current_set]
-                title_keys = list(current_sounds.keys())
-                current_channels = {key: pygame.mixer.Channel(index) for index, key in enumerate(title_keys)}
+                volumes_for_display = {key: 0 for key in current_sounds}  # Reset volumes
+            elif event.key == pygame.K_p:
+                current_set = 'P'
+                current_sounds = sound_sets[current_set]
+                volumes_for_display = {key: 0 for key in current_sounds}  # Reset volumes
             elif event.key in current_sounds:
-                channel = current_channels[event.key]
-                if not channel.get_busy():
-                    channel.play(current_sounds[event.key], loops=-1)
+                current_audio_key = event.key
+                current_audio = current_sounds[current_audio_key]
+                current_audio.play(-1)
 
-    # Continuously update the volume of the currently selected audio
-    new_volume = int(pot.value * 100)
-    for key in current_sounds:
-        channel = current_channels[key]
-        if channel.get_busy():
-            channel.set_volume(pot.value)
-        volumes_for_display[key] = new_volume
+    # Update volume of the currently selected audio
+    if current_audio and current_audio_key is not None:
+        new_volume = int(pot.value * 100)
+        volumes_for_display[current_audio_key] = new_volume
+        current_audio.set_volume(pot.value)
 
     # Redraw the GUI with updated volume
-    draw_matrix(screen, titles, current_set)
+    draw_matrix(screen, titles, current_audio_key)
     pygame.display.flip()
 
 pygame.quit()

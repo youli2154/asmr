@@ -52,7 +52,7 @@ sound_sets = {
     }
 }
 
-# Titles for display (mapping directly corresponds to sound keys)
+# Titles for display
 titles = [
     "rain", "stream", "waves",
     "fire", "thunder", "wind",
@@ -64,7 +64,6 @@ current_set = 'O'
 current_sounds = sound_sets[current_set]
 current_audio = None
 current_audio_key = None
-title_keys = list(current_sounds.keys())  # Map titles to keys for volume display
 
 # Initialize volumes for display
 volumes_for_display = {key: 0 for key in current_sounds}
@@ -86,16 +85,16 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_o:
-                current_set = 'O'
+            if event.key == pygame.K_o or event.key == pygame.K_p:
+                current_set = 'O' if event.key == pygame.K_o else 'P'
                 current_sounds = sound_sets[current_set]
-                title_keys = list(current_sounds.keys())  # Update keys for 'O' set
-            elif event.key == pygame.K_p:
-                current_set = 'P'
-                current_sounds = sound_sets[current_set]
-                title_keys = list(current_sounds.keys())  # Update keys for 'P' set
+                current_audio = None
+                current_audio_key = None
+                volumes_for_display = {key: 0 for key in current_sounds}  # Reset volumes
             if event.key in current_sounds:
                 current_audio_key = event.key
+                if current_audio:
+                    current_audio.stop()
                 current_audio = current_sounds[current_audio_key]
                 current_audio.play(-1)  # Play the selected audio in a loop
 

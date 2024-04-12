@@ -77,18 +77,24 @@ current_audio_key = None
 # Initialize volumes for display
 volumes_for_display = {key: 0 for key in current_sounds}
 
-# Function to draw the matrix with margin
 def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
-    margin = 60  # Margin of 20 pixels
+    margin = 20  # Margin of 20 pixels
     grid_width = (screen_width - 2 * margin) // 3
     grid_height = (screen_height - 2 * margin) // 4
     for i, key in enumerate(current_sounds.keys()):
+        # Calculate positions
         x = margin + (i % 3) * grid_width + 10
         y = margin + (i // 3) * grid_height + 10
+
+        # Display the title
+        title_label = font.render(f"{titles[i]}", True, WHITE)
+        screen.blit(title_label, (x, y))
+
+        # Display the volume percentage directly below the title
         volume_display = volumes_for_display[key]
-        label = font.render(f"{titles[i]}: {volume_display}%", True, WHITE)
-        screen.blit(label, (x, y))
+        volume_label = font.render(f"{volume_display}%", True, WHITE)
+        screen.blit(volume_label, (x, y + title_label.get_height()))  # Adjust vertical position based on the height of the title
 
 
 # Main loop

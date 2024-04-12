@@ -9,8 +9,8 @@ pygame.mixer.init()
 pygame.mixer.set_num_channels(24)  # Set more channels than the number of sounds
 
 # Set the size of the window
-screen_width = 1200
-screen_height = 960
+screen_width = 1000
+screen_height = 1000
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # Define colors
@@ -20,7 +20,7 @@ WHITE = (255, 255, 255)
 # Initialize fonts
 title_font = pygame.font.Font(None, 60)  # Font size for titles
 volume_font = pygame.font.Font(None, 100)  # Font size for volume percentages
-header_font = pygame.font.Font(None, 30)  # Font for headers
+header_font = pygame.font.Font(None, 25)  # Font for headers
 
 # Define two sets of sounds and associate channels for each sound
 sound_sets = {
@@ -83,13 +83,12 @@ volumes_for_display = {key: 0 for key in current_sounds}
 def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
     margin = 20
-    top_margin = 100  # Space for header and navigation text
-    header_font = pygame.font.Font(None, 50)  # Font for headers
+    top_margin = 50  # Space for header and navigation text
     
     # Header and navigation text based on the sound set
     header_text = "Natural Sounds" if current_set == 'O' else "Artificial Sounds"
     nav_text = "Rotate Encoder to Artificial Sounds >" if current_set == 'O' else "< Rotate Encoder to Natural Sounds"
-    header_label = header_font.render(header_text, True, WHITE)
+    header_label = title_font.render(header_text, True, WHITE)
     nav_label = header_font.render(nav_text, True, WHITE)
     screen.blit(header_label, ((screen_width - header_label.get_width()) // 2, margin))
     if current_set == 'O':

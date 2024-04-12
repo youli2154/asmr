@@ -123,6 +123,12 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_z:  # Check if 'Z' is pressed
+                # Set all volumes to zero
+                for key in volumes_for_display:
+                    volumes_for_display[key] = 0
+                    channels[key].set_volume(0)
+                print("Restart")
             if event.key == pygame.K_o or event.key == pygame.K_p:
                 current_set = 'O' if event.key == pygame.K_o else 'P'
                 current_sounds = sound_sets[current_set]

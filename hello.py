@@ -52,17 +52,26 @@ sound_sets = {
     }
 }
 
-# Titles for display
-titles = [
-    "Rain", "Waves", "Underwater",
-    "Fire", "Thunder", "Wind",
-    "Bird", "Cricket", "Frog",
-    "Cat", "Temple", "Wooden Fish"
-]
+# Titles for display based on the sound set
+titles_sets = {
+    'O': [
+        "Rain", "Waves", "Underwater",
+        "Fire", "Thunder", "Wind",
+        "Bird", "Cricket", "Frog",
+        "Cat", "Temple", "Wooden Fish"
+    ],
+    'P': [
+        "Cafe", "Train", "Bar",
+        "Typewriter", "Pencil", "Clock",
+        "Subway", "Arcade", "711",
+        "Chimes", "Footstep", "Wooden Fish"
+    ]
+}
 
 current_set = 'O'
 current_sounds = sound_sets[current_set]
 channels = {key: pygame.mixer.Channel(i) for i, key in enumerate(current_sounds.keys())}
+current_titles = titles_sets[current_set]
 current_audio_key = None
 
 # Initialize volumes for display
@@ -88,9 +97,10 @@ while running:
             if event.key == pygame.K_o or event.key == pygame.K_p:
                 current_set = 'O' if event.key == pygame.K_o else 'P'
                 current_sounds = sound_sets[current_set]
+                current_titles = titles_sets[current_set]
                 channels = {key: pygame.mixer.Channel(i) for i, key in enumerate(current_sounds.keys())}
                 volumes_for_display = {key: 0 for key in current_sounds}  # Reset volumes
-            elif event.key in current_sounds:
+            if event.key in current_sounds:
                 current_audio_key = event.key
                 channel = channels[current_audio_key]
                 channel.play(current_sounds[current_audio_key], loops=-1)
@@ -101,7 +111,7 @@ while running:
         channels[current_audio_key].set_volume(pot.value)
 
     # Redraw the GUI with updated volume
-    draw_matrix(screen, titles, current_audio_key)
+    draw_matrix(screen, current_titles, current_audio_key)
     pygame.display.flip()
 
 pygame.quit()

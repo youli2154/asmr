@@ -20,6 +20,7 @@ WHITE = (255, 255, 255)
 # Initialize fonts
 title_font = pygame.font.Font(None, 60)  # Font size for titles
 volume_font = pygame.font.Font(None, 100)  # Font size for volume percentages
+header_font = pygame.font.Font(None, 50)  # Font for headers
 
 # Define two sets of sounds and associate channels for each sound
 sound_sets = {

@@ -47,7 +47,7 @@ sound_sets = {
         pygame.K_g: pygame.mixer.Sound("subway.mp3"),
         pygame.K_h: pygame.mixer.Sound("arcade.mp3"),
         pygame.K_i: pygame.mixer.Sound("conveniencestore.mp3"),
-        pygame.K_j: pygame.mixer.Sound("chimes.mp3"),
+        pygame.K_j: pygame.mixer.Sound("bells.mp3"),
         pygame.K_k: pygame.mixer.Sound("footstep.mp3"),
         pygame.K_l: pygame.mixer.Sound("muyu.mp3")
     }

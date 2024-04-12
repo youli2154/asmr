@@ -9,8 +9,8 @@ pygame.mixer.init()
 pygame.mixer.set_num_channels(24)  # Set more channels than the number of sounds
 
 # Set the size of the window
-screen_width = 600
-screen_height = 480
+screen_width = 1200
+screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # Define colors
@@ -18,7 +18,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
 # Initialize font
-font = pygame.font.Font(None, 24)
+font = pygame.font.Font(None, 40)
 
 # Define two sets of sounds and associate channels for each sound
 sound_sets = {
@@ -54,10 +54,10 @@ sound_sets = {
 
 # Titles for display
 titles = [
-    "rain", "stream", "waves",
-    "fire", "thunder", "wind",
-    "birds", "cricket", "bell",
-    "cafe", "train", "world"
+    "Rain", "Waves", "Underwater",
+    "Fire", "Thunder", "Wind",
+    "Bird", "Cricket", "Frog",
+    "Cat", "Temple", "Wooden Fish"
 ]
 
 current_set = 'O'

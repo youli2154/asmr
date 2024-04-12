@@ -17,8 +17,9 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 BLACK = (182, 0, 0)
 WHITE = (255, 255, 255)
 
-# Initialize font
-font = pygame.font.Font(None, 40)
+# Initialize fonts
+title_font = pygame.font.Font(None, 60)  # Font size for titles
+volume_font = pygame.font.Font(None, 100)  # Font size for volume percentages
 
 # Define two sets of sounds and associate channels for each sound
 sound_sets = {
@@ -77,33 +78,28 @@ current_audio_key = None
 # Initialize volumes for display
 volumes_for_display = {key: 0 for key in current_sounds}
 
-# Function to draw the matrix with center-aligned titles and volumes
+# Function to draw the matrix
 def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
-    margin = 20  # Margin of 20 pixels
+    margin = 20
     grid_width = (screen_width - 2 * margin) // 3
     grid_height = (screen_height - 2 * margin) // 4
     for i, key in enumerate(current_sounds.keys()):
-        # Text positioning within each grid cell
         base_x = margin + (i % 3) * grid_width
         base_y = margin + (i // 3) * grid_height
 
-        # Prepare the title and volume labels
-        title_label = font.render(f"{titles[i]}", True, WHITE)
-        volume_display = volumes_for_display[key]
-        volume_label = font.render(f"{volume_display}%", True, WHITE)
-
-        # Calculate the x position to center the text within its grid space
+        # Render the title
+        title_label = title_font.render(f"{titles[i]}", True, WHITE)
         title_x = base_x + (grid_width - title_label.get_width()) // 2
+        title_y = base_y + (grid_height - title_label.get_height()) // 2 - 30  # Adjust positioning
+
+        # Render the volume
+        volume_display = volumes_for_display[key]
+        volume_label = volume_font.render(f"{volume_display}%", True, WHITE)
         volume_x = base_x + (grid_width - volume_label.get_width()) // 2
+        volume_y = title_y + title_label.get_height()  # Place directly below the title
 
-        # Calculate the y position to center the text within its vertical space
-        # Vertical centering considers both title and volume to adjust the start position
-        combined_height = title_label.get_height() + volume_label.get_height()
-        title_y = base_y + (grid_height - combined_height) // 2
-        volume_y = title_y + title_label.get_height()
-
-        # Blit the title and volume on the screen
+        # Blit to the screen
         screen.blit(title_label, (title_x, title_y))
         screen.blit(volume_label, (volume_x, volume_y))
 

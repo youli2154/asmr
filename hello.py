@@ -52,10 +52,19 @@ sound_sets = {
     }
 }
 
+# Titles for display (mapping directly corresponds to sound keys)
+titles = [
+    "rain", "stream", "waves",
+    "fire", "thunder", "wind",
+    "birds", "cricket", "bell",
+    "cafe", "train", "world"
+]
+
 current_set = 'O'
 current_sounds = sound_sets[current_set]
 current_audio = None
 current_audio_key = None
+title_keys = list(current_sounds.keys())  # Map titles to keys for volume display
 
 # Initialize volumes for display
 volumes_for_display = {key: 0 for key in current_sounds}
@@ -74,21 +83,21 @@ def draw_matrix(screen, titles, current_key):
 running = True
 while running:
     for event in pygame.event.get():
-        if event.type pygame.QUIT:
+        if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_o:
                 current_set = 'O'
                 current_sounds = sound_sets[current_set]
-                volumes_for_display = {key: 0 for key in current_sounds}  # Reset volumes
+                title_keys = list(current_sounds.keys())  # Update keys for 'O' set
             elif event.key == pygame.K_p:
                 current_set = 'P'
                 current_sounds = sound_sets[current_set]
-                volumes_for_display = {key: 0 for key in current_sounds}  # Reset volumes
-            elif event.key in current_sounds:
+                title_keys = list(current_sounds.keys())  # Update keys for 'P' set
+            if event.key in current_sounds:
                 current_audio_key = event.key
                 current_audio = current_sounds[current_audio_key]
-                current_audio.play(-1)
+                current_audio.play(-1)  # Play the selected audio in a loop
 
     # Update volume of the currently selected audio
     if current_audio and current_audio_key is not None:

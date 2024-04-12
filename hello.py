@@ -14,7 +14,7 @@ screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # Define colors
-BLACK = (0, 0, 0)
+BLACK = (182, 0, 0)
 WHITE = (255, 255, 255)
 
 # Initialize font

@@ -6,7 +6,7 @@ pot = MCP3008(channel=0)
 # Initialize Pygame and mixer
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.set_num_channels(48)
+pygame.mixer.set_num_channels(16)  # Ensure enough channels for simultaneous playback
 
 # Set the size of the window
 screen_width = 600
@@ -60,10 +60,11 @@ titles = [
     "cafe", "train", "world"
 ]
 
-# Start with sound set 'O'
 current_set = 'O'
 current_sounds = sound_sets[current_set]
+current_channels = {key: pygame.mixer.Channel(index) for index, key in enumerate(current_sounds.keys())}
 current_audio = None
+current_audio_key = None
 title_keys = list(current_sounds.keys())
 
 # Initialize volumes for display
@@ -89,30 +90,26 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_o:
-                current_set = 'O'
+            if event.key == pygame.K_o or event.key == pygame.K_p:
+                current_set = 'O' if event.key == pygame.K_o else 'P'
                 current_sounds = sound_sets[current_set]
-                title_keys = list(current_sounds.keys())  # Update keys for the 'O' set
-            elif event.key == pygame.K_p:
-                current_set = 'P'
-                current_sounds = sound_sets[current_set]
-                title_keys = list(current_sounds.keys())  # Update keys for the 'P' set
-
-            # Check if the pressed key corresponds to a sound in the current set
-            if event.key in current_sounds:
-                if current_audio:
-                    current_audio.stop()  # Stop the current audio if playing
-                current_audio = current_sounds[event.key]
-                current_audio.play(-1)  # Play the selected audio in a loop
+                title_keys = list(current_sounds.keys())
+                current_channels = {key: pygame.mixer.Channel(index) for index, key in enumerate(title_keys)}
+            elif event.key in current_sounds:
+                channel = current_channels[event.key]
+                if not channel.get_busy():
+                    channel.play(current_sounds[event.key], loops=-1)
 
     # Continuously update the volume of the currently selected audio
-    if current_audio and current_audio_key is not None:
-        new_volume = int(pot.value * 100)  # Convert potentiometer value to percentage
-        volumes_for_display[current_audio_key] = new_volume  # Update volume display
-        current_audio.set_volume(pot.value)  # Set the actual volume
+    new_volume = int(pot.value * 100)
+    for key in current_sounds:
+        channel = current_channels[key]
+        if channel.get_busy():
+            channel.set_volume(pot.value)
+        volumes_for_display[key] = new_volume
 
     # Redraw the GUI with updated volume
-    draw_matrix(screen, titles, current_audio_key)
+    draw_matrix(screen, titles, current_set)
     pygame.display.flip()
 
 pygame.quit()

@@ -77,25 +77,35 @@ current_audio_key = None
 # Initialize volumes for display
 volumes_for_display = {key: 0 for key in current_sounds}
 
+# Function to draw the matrix with center-aligned titles and volumes
 def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
     margin = 20  # Margin of 20 pixels
     grid_width = (screen_width - 2 * margin) // 3
     grid_height = (screen_height - 2 * margin) // 4
     for i, key in enumerate(current_sounds.keys()):
-        # Calculate positions
-        x = margin + (i % 3) * grid_width + 10
-        y = margin + (i // 3) * grid_height + 10
+        # Text positioning within each grid cell
+        base_x = margin + (i % 3) * grid_width
+        base_y = margin + (i // 3) * grid_height
 
-        # Display the title
+        # Prepare the title and volume labels
         title_label = font.render(f"{titles[i]}", True, WHITE)
-        screen.blit(title_label, (x, y))
-
-        # Display the volume percentage directly below the title
         volume_display = volumes_for_display[key]
         volume_label = font.render(f"{volume_display}%", True, WHITE)
-        screen.blit(volume_label, (x, y + title_label.get_height()))  # Adjust vertical position based on the height of the title
 
+        # Calculate the x position to center the text within its grid space
+        title_x = base_x + (grid_width - title_label.get_width()) // 2
+        volume_x = base_x + (grid_width - volume_label.get_width()) // 2
+
+        # Calculate the y position to center the text within its vertical space
+        # Vertical centering considers both title and volume to adjust the start position
+        combined_height = title_label.get_height() + volume_label.get_height()
+        title_y = base_y + (grid_height - combined_height) // 2
+        volume_y = title_y + title_label.get_height()
+
+        # Blit the title and volume on the screen
+        screen.blit(title_label, (title_x, title_y))
+        screen.blit(volume_label, (volume_x, volume_y))
 
 # Main loop
 running = True

@@ -84,18 +84,36 @@ def draw_matrix(screen, titles, current_key):
     margin = 20
     grid_width = (screen_width - 2 * margin) // 3
     grid_height = (screen_height - 2 * margin) // 4
+    top_margin = 100  # Space for header
+
+    # Header and navigation text
+    if current_set == 'O':
+        header_text = "Natural Sounds"
+        nav_text = "Rotate Encoder to Artificial Sounds >"
+        header_label = header_font.render(header_text, True, WHITE)
+        nav_label = header_font.render(nav_text, True, WHITE)
+        screen.blit(header_label, ((screen_width - header_label.get_width()) // 2, margin))
+        screen.blit(nav_label, (screen_width - nav_label.get_width() - margin, margin))
+    else:
+        header_text = "Artificial Sounds"
+        nav_text = "< Rotate Encoder to Natural Sounds"
+        header_label = header_font.render(header_text, True, WHITE)
+        nav_label = header_font.render(nav_text, True, WHITE)
+        screen.blit(header_label, ((screen_width - header_label.get_width()) // 2, margin))
+        screen.blit(nav_label, (margin, margin))
+
     for i, key in enumerate(current_sounds.keys()):
         base_x = margin + (i % 3) * grid_width
-        base_y = margin + (i // 3) * grid_height
+        base_y = top_margin + margin + (i // 3) * grid_height
 
         # Render the title
-        title_label = title_font.render(f"{titles[i]}", True, WHITE)
+        title_label = font.render(f"{titles[i]}", True, WHITE)
         title_x = base_x + (grid_width - title_label.get_width()) // 2
         title_y = base_y + (grid_height - title_label.get_height()) // 2 - 30  # Adjust positioning
 
         # Render the volume
         volume_display = volumes_for_display[key]
-        volume_label = volume_font.render(f"{volume_display}%", True, WHITE)
+        volume_label = font.render(f"{volume_display}%", True, WHITE)
         volume_x = base_x + (grid_width - volume_label.get_width()) // 2
         volume_y = title_y + title_label.get_height()  # Place directly below the title
 

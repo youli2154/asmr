@@ -80,7 +80,7 @@ volumes_for_display = {key: 0 for key in current_sounds}
 # Function to draw the matrix with margin
 def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
-    margin = 20  # Margin of 20 pixels
+    margin = 60  # Margin of 20 pixels
     grid_width = (screen_width - 2 * margin) // 3
     grid_height = (screen_height - 2 * margin) // 4
     for i, key in enumerate(current_sounds.keys()):

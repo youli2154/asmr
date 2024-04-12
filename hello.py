@@ -51,7 +51,7 @@ font = pygame.font.Font(None, 24)
 volumes_for_display = {key: 0 for key in audio_files}  # All volumes start at 0%
 
 # Function to draw the matrix
-def draw_matrix(screen, titles, volumes_for_display, current_key):
+def draw_matrix(screen, titles, current_key):
     screen.fill(BLACK)
     spacing_x = screen_width // 3
     spacing_y = screen_height // 4
@@ -63,8 +63,8 @@ def draw_matrix(screen, titles, volumes_for_display, current_key):
         # Get the corresponding key for the title
         key = title_keys[i]
         
-        # Display volume only for the current active track
-        volume_display = volumes_for_display[key] if key == current_key else 0
+        # Check if the title is the current one being adjusted
+        volume_display = volumes_for_display[key] if key == current_key else volumes_for_display[key]
         
         # Create the label for each sound
         label = font.render(f"{title}: {volume_display}%", True, WHITE)
@@ -74,7 +74,7 @@ def draw_matrix(screen, titles, volumes_for_display, current_key):
 
 # Variable to keep track of which audio key is currently being volume-controlled
 current_audio_key = None
-current_audio = None  # Variable to keep track of the currently playing audio
+current_audio = None
 
 # Main loop
 running = True
@@ -86,8 +86,6 @@ while running:
             if event.key in audio_files:
                 current_audio_key = event.key  # Update the current key
                 if current_audio is not audio_files[event.key]:  # If a new audio is selected
-                    if current_audio:
-                        current_audio.stop()  # Stop the previous audio
                     current_audio = audio_files[event.key]
                     current_audio.play(-1)  # Play the selected audio in a loop
 
@@ -98,7 +96,7 @@ while running:
         current_audio.set_volume(pot.value)  # Set the actual volume
 
     # Redraw the GUI with updated volume
-    draw_matrix(screen, titles, volumes_for_display, current_audio_key)
+    draw_matrix(screen, titles, current_audio_key)
     pygame.display.flip()
 
 pygame.quit()

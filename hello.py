@@ -31,25 +31,25 @@ sound_sets = {
         pygame.K_d: pygame.mixer.Sound("fire.mp3"),
         pygame.K_e: pygame.mixer.Sound("thunder.mp3"),
         pygame.K_f: pygame.mixer.Sound("wind.mp3"),
-        pygame.K_g: pygame.mixer.Sound("birds.mp3"),
+        pygame.K_g: pygame.mixer.Sound("seals_fishermans_wharf.mp3"),
         pygame.K_h: pygame.mixer.Sound("cricket.mp3"),
-        pygame.K_i: pygame.mixer.Sound("frog.mp3"),
+        pygame.K_i: pygame.mixer.Sound("parrot.mp3"),
         pygame.K_j: pygame.mixer.Sound("cat.mp3"),
-        pygame.K_k: pygame.mixer.Sound("temple.mp3"),
+        pygame.K_k: pygame.mixer.Sound("foghorn_goldengatebridge.mp3"),
         pygame.K_l: pygame.mixer.Sound("muyu.mp3")
     },
     'P': {
         pygame.K_a: pygame.mixer.Sound("cafe.mp3"),
-        pygame.K_b: pygame.mixer.Sound("train.mp3"),
-        pygame.K_c: pygame.mixer.Sound("bar.mp3"),
+        pygame.K_b: pygame.mixer.Sound("street.mp3"),
+        pygame.K_c: pygame.mixer.Sound("barbershop.mp3"),
         pygame.K_d: pygame.mixer.Sound("typewriter.mp3"),
-        pygame.K_e: pygame.mixer.Sound("pencil.mp3"),
-        pygame.K_f: pygame.mixer.Sound("clock.mp3"),
-        pygame.K_g: pygame.mixer.Sound("subway.mp3"),
-        pygame.K_h: pygame.mixer.Sound("arcade.mp3"),
-        pygame.K_i: pygame.mixer.Sound("conveniencestore.mp3"),
+        pygame.K_e: pygame.mixer.Sound("ferry_alcatraz.mp3"),
+        pygame.K_f: pygame.mixer.Sound("train.mp3"),
+        pygame.K_g: pygame.mixer.Sound("muni_bus.mp3"),
+        pygame.K_h: pygame.mixer.Sound("bart.mp3"),
+        pygame.K_i: pygame.mixer.Sound("cablecar.mp3"),
         pygame.K_j: pygame.mixer.Sound("bells.mp3"),
-        pygame.K_k: pygame.mixer.Sound("footstep.mp3"),
+        pygame.K_k: pygame.mixer.Sound("landing_in_sf.mp3"),
         pygame.K_l: pygame.mixer.Sound("muyu.mp3")
     }
 }
@@ -59,14 +59,14 @@ titles_sets = {
     'O': [
         "Rain", "Waves", "Underwater",
         "Fire", "Thunder", "Wind",
-        "Bird", "Cricket", "Frog",
-        "Cat", "Temple", "Wooden Fish"
+        "Seal", "Cricket", "Parrots",
+        "Cat", "Foghorn", "Wooden Fish"
     ],
     'P': [
-        "Cafe", "Train", "Bar",
-        "Typewriter", "Pencil", "Clock",
-        "Subway", "Arcade", "711",
-        "Chimes", "Footstep", "Wooden Fish"
+        "Cafe", "Street", "Barbershop",
+        "Typewriter", "Ferry", "Train",
+        "Muni", "Bart", "Cablecar",
+        "Chimes", "Landing", "Wooden Fish"
     ]
 }
 
@@ -150,3 +150,4 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
+

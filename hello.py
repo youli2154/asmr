@@ -39,14 +39,14 @@ sound_sets = {
         pygame.K_l: pygame.mixer.Sound("muyu.mp3")
     },
     'P': {
-        pygame.K_a: pygame.mixer.Sound("cafe.mp3"),
+        pygame.K_a: pygame.mixer.Sound("bart_announcement.mp3"),
         pygame.K_b: pygame.mixer.Sound("street.mp3"),
         pygame.K_c: pygame.mixer.Sound("barbershop.mp3"),
         pygame.K_d: pygame.mixer.Sound("typewriter.mp3"),
         pygame.K_e: pygame.mixer.Sound("ferry_alcatraz.mp3"),
         pygame.K_f: pygame.mixer.Sound("train.mp3"),
         pygame.K_g: pygame.mixer.Sound("muni_bus.mp3"),
-        pygame.K_h: pygame.mixer.Sound("bart.mp3"),
+        pygame.K_h: pygame.mixer.Sound("bart_short.mp3"),
         pygame.K_i: pygame.mixer.Sound("cablecar.mp3"),
         pygame.K_j: pygame.mixer.Sound("bells.mp3"),
         pygame.K_k: pygame.mixer.Sound("landing_in_sf.mp3"),
@@ -150,4 +150,5 @@ while running:
     pygame.display.flip()
 
 pygame.quit()
+
 
